@@ -1,0 +1,11 @@
+{
+  "title": "Getting Started",
+  "pages": [
+     "index",
+    "---INTRODUCTION---",
+    "about",
+     "---USER GUIDE---",
+    "donation-guide",
+    "(dashboard-user)"
+  ]
+}

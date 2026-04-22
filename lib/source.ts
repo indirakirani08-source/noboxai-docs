@@ -1,37 +1,19 @@
-import { docs } from 'collections/server';
-import { type InferPageType, loader } from 'fumadocs-core/source';
-import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
-import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
+import { docs } from "@/.source/server";
+import { loader } from "fumadocs-core/source";
+import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
+import { icons } from "lucide-react";
+import { createElement } from "react";
 
-// See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
-  baseUrl: docsRoute,
+  baseUrl: "/docs",
   source: docs.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
+  icon(name) {
+    if (name && name in icons) return createElement(icons[name as keyof typeof icons]);
+  },
+  i18n: {
+    languages: ["id", "en"],
+    defaultLanguage: "id",
+    parser: "dir",
+  },
 });
-
-export function getPageImage(page: InferPageType<typeof source>) {
-  const segments = [...page.slugs, 'image.png'];
-
-  return {
-    segments,
-    url: `${docsImageRoute}/${segments.join('/')}`,
-  };
-}
-
-export function getPageMarkdownUrl(page: InferPageType<typeof source>) {
-  const segments = [...page.slugs, 'content.md'];
-
-  return {
-    segments,
-    url: `${docsContentRoute}/${segments.join('/')}`,
-  };
-}
-
-export async function getLLMText(page: InferPageType<typeof source>) {
-  const processed = await page.data.getText('processed');
-
-  return `# ${page.data.title} (${page.url})
-
-${processed}`;
-}

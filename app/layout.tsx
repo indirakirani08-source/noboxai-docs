@@ -1,19 +1,36 @@
-import { RootProvider } from 'fumadocs-ui/provider/next';
-import './global.css';
-import { Inter, Geist } from 'next/font/google';
-import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+import { RootProvider } from "fumadocs-ui/provider/next";
+import "./global.css";
+import { Inter } from "next/font/google";
+import type { Metadata } from "next";
 
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ["latin"],
 });
 
-export default function Layout({ children }: LayoutProps<'/'>) {
+export const metadata: Metadata = {
+  title: "NurimanPay Documentation",
+  description: "Dokumentasi resmi NurimanPay",
+  icons: {
+    icon: "/LogoNuriman.png",
+    shortcut: "/LogoNuriman.png",
+    apple: "/LogoNuriman.png",
+  },
+};
+
+export default function Layout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={cn(inter.className, "font-sans", geist.variable)} suppressHydrationWarning>
+    <html lang="id" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
-        <RootProvider>{children}</RootProvider>
+        <RootProvider
+          search={{
+            options: {
+              // Memastikan pencarian mencari ke API yang baru kita buat
+              api: "/api/search",
+            },
+          }}
+        >
+          {children}
+        </RootProvider>
       </body>
     </html>
   );

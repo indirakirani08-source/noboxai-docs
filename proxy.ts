@@ -6,22 +6,31 @@ const { rewrite: rewriteDocs } = rewritePath(
   `${docsRoute}{/*path}`,
   `${docsContentRoute}{/*path}/content.md`,
 );
+
 const { rewrite: rewriteSuffix } = rewritePath(
   `${docsRoute}{/*path}.mdx`,
   `${docsContentRoute}{/*path}/content.md`,
 );
 
 export default function proxy(request: NextRequest) {
-  const result = rewriteSuffix(request.nextUrl.pathname);
-  if (result) {
-    return NextResponse.rewrite(new URL(result, request.nextUrl));
+  const { pathname } = request.nextUrl;
+
+  if (pathname === '/') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/id/docs';
+    return NextResponse.redirect(url);
+  }
+
+  const resultSuffix = rewriteSuffix(pathname);
+  if (resultSuffix) {
+    return NextResponse.rewrite(new URL(resultSuffix, request.nextUrl));
   }
 
   if (isMarkdownPreferred(request)) {
-    const result = rewriteDocs(request.nextUrl.pathname);
+    const resultDocs = rewriteDocs(pathname);
 
-    if (result) {
-      return NextResponse.rewrite(new URL(result, request.nextUrl));
+    if (resultDocs) {
+      return NextResponse.rewrite(new URL(resultDocs, request.nextUrl));
     }
   }
 

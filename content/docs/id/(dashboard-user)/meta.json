@@ -1,0 +1,11 @@
+{
+    "title": "Dashboard User",
+    "icon": "Dashboard",
+    "pages": [
+      "navigation-and-hero",
+      "donation-programs",
+      "completed-programs",
+      "footer-details"
+    ]
+  }
+  
